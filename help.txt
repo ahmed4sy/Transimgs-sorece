@@ -1,0 +1,17 @@
+
+## Translate Images Arabic (TIA):~
+----------------------------------------------------
+transimgs --[State] {Options}
+----------------------------------------------------
+# State:
+    1- readimg: display. 
+    2- extrimg: draw.
+    3- extrimgs: draws.
+    4- sorece: s.
+----------------------------------------------------
+# Options:
+    1- rdr: jython.
+    2- file: this.
+    3- files: s.
+    4- viwe: viwe.
+-----------------------------------------------------
