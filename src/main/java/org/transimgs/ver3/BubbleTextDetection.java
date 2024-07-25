@@ -492,6 +492,26 @@ public class BubbleTextDetection {
         return bube;
     }
 
+    public static String executeCommand(String command) {
+        Process p;
+        try {
+            p = Runtime.getRuntime().exec(command);
+            p.waitFor();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            StringBuilder output = new StringBuilder();
+            String line = reader.readLine();
+            while (line != null) {
+                output.append(line);
+                output.append(System.lineSeparator());
+                line = reader.readLine();
+            }
+            return output.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static String clearSymbols(String txt) {
         String res = txt
                 .toLowerCase()

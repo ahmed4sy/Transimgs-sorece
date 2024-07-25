@@ -40,7 +40,6 @@ public class Reader {
 
     Reader(String sorece) {
         this.sorece = sorece;
-        System.out.println("Raeder::ON");
     }
 
     static boolean Debug = false;
@@ -68,12 +67,14 @@ public class Reader {
             }
             Thread.sleep(1000);
             sec--;
-            if (sec > 0) {
-                System.out.print("\rrunning.." + sec);
+            if (sec >= 0) {
+                System.out.print("\rdataOCR.running.." + sec);
+            } else {
+                System.out.print("\rdataOCR.running..");
             }
 
-
         }
+        System.out.print("\rdataOCR..running..");
         List<List<Integer>> dataOCR = new ArrayList<>();
         for (int i = 0; i < js.getJSONArray("dataOCR").length(); i++) {
             dataOCR.add(
@@ -177,10 +178,6 @@ public class Reader {
         return end;
     }
 
-    int[] endread() {
-        int resRead[] = {1, 2, 3};
-        return resRead;
-    }
 
     ArrayList<ArrayList<Integer>> imgToPieces(String sorece, int[] SplitPos) throws IOException {
         print("imgToPieces loading...");

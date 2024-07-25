@@ -16,19 +16,24 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        extraImage("/home/ahmed4s/Pictures/chapter61/image.jpg");
-//        Reader rdr = new Reader("/home/ahmed4s/Pictures/chapter61/image.jpg");
-//        List<List<Integer>> resultReader = rdr.dataOCR();
-
-//        BubbleTextDetection.saveBufferimgs(
-//                BubbleTextDetection.extractRegionsRaeder(
-//                        ImageIO.read(new File("/home/ahmed4s/Pictures/chapter61/image.jpg"))
-//                        , BubbleTextDetection.convertToRectList(resultReader)
-//                )
-//                , "cpr/");
+        try (Scanner sc = new Scanner(System.in)) {
+            System.out.print("Enter Folder images: ");
+            String imgfolder = sc.nextLine();
+            System.out.print("Enter Folder Output: ");
+            String folderout = sc.nextLine();
+            System.out.println();
+            String[] files = BubbleTextDetection.executeCommand("ls -m " + imgfolder).split(",");
+            for (String file : files) {
+                if (!file.isEmpty()) {
+                    extraImage(imgfolder + file.strip().replace("\n", ""), folderout);
+                }
+            }
+        }
+//        extraImage("/home/ahmed4s/Downloads/002.jpg", "so");
     }
 
     public static void readimg(String imagename) throws TesseractException, IOException, InterruptedException, JSONException {
@@ -37,13 +42,15 @@ public class Main {
         rdr.displayImgReader(resultReader);
     }
 
-    public static void extraImage(String imagename) throws Exception {
+    public static void extraImage(String imagename, String folderOut) throws Exception {
+        System.out.println("-------------" + imagename.split("/")[imagename.split("/").length - 1] + "-------------");
         Reader rdr = new Reader(imagename);
         List<List<Integer>> resultReader = rdr.dataOCR();
         ArrayList<ArrayList<String>> Text = rdr.getText(resultReader);
-        Text = Translator.translistText(Text);
+        Text = TransText.translistText(Text);
         Drawing dra = new Drawing(Reader.sorece, Text, resultReader);
-        dra.drawingTextandSave();
+        dra.drawingTextandSave(imagename.split("/")[imagename.split("/").length - 1], folderOut);
+        System.out.println("------------- END -------------");
     }
 
     public static void methodTess4j() throws TesseractException, IOException {

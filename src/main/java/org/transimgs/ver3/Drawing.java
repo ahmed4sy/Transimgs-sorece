@@ -38,7 +38,6 @@ public class Drawing {
     }
 
     Drawing(String PATH, ArrayList<ArrayList<String>> text, List<List<Integer>> resultReader) {
-        println("Drawing::ON");
         this.text = text;
         this.resultReader = resultReader;
         this.PATH = PATH;
@@ -95,14 +94,14 @@ public class Drawing {
         return stat;
     }
 
-    void drawingTextandSave() throws IOException, IndexOutOfBoundsException, InterruptedException {
+    void drawingTextandSave(String Nameimg, String outfolder) throws IOException, IndexOutOfBoundsException, InterruptedException {
         print("drawingTextandSave...");
         BufferedImage image = ImageIO.read(new File(PATH));
         Graphics2D W = image.createGraphics();
         int i = 0;
         for (List<Integer> reRe : resultReader) {
             int ms = (reRe.get(3) - reRe.get(1));
-            int fontsize = 22;
+            int fontsize = (int) ((ms / 10) + 15);
             if (!text.isEmpty()) {
                 W.setFont(new Font("Batang", 2, fontsize));
                 W.setColor(Color.white);
@@ -112,20 +111,22 @@ public class Drawing {
                 int space = 0;
                 FontMetrics fma = W.getFontMetrics();
                 for (String txs : text.get(i)) {
-                    Rectangle2D rect = fma.getStringBounds(txs, W);
-                    int centerX = (reRe.get(2) + reRe.get(0) - (int) rect.getWidth()) / 2;
-                    W.drawString(txs, centerX, reRe.get(1) + 30 + space);
-                    space += 30;
+                    if (!txs.isEmpty()) {
+                        Rectangle2D rect = fma.getStringBounds(txs, W);
+                        int centerX = (reRe.get(2) + reRe.get(0) - (int) rect.getWidth()) / 2;
+                        W.drawString(txs, centerX, reRe.get(1) + 30 + space);
+                        space += (int) rect.getHeight() + 5;
+                    }
                 }
 
             }
             i++;
 
         }
-        ImageIO.write(image, "jpg", new File("finel.jpg"));
+        ImageIO.write(image, "jpg", new File(outfolder + Nameimg));
         Thread.sleep(500);
         Runtime.getRuntime().exec(
-                "open finel.jpg");
+                "open " + outfolder);
         println("Done!");
     }
 

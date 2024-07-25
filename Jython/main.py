@@ -62,29 +62,6 @@ def bubbles(ocr:list):
     result = []
     tmp = list[0][0]
     s = 0
-    # end = len(list)
-    # while s == end:
-    #     for l in range(s,len(list)):
-    #         if tmp[0][1] < list[l][0][0][1] and list[l][0][0][1] < tmp[0][1]+limit:
-    #             tmp += list[l]
-    #             list.remove(list[l])
-    #     s+=1
-    #     tmp = list[s][0]
-
-    # for r in range(len(list)):
-    #     xtmp=list[r][0][0][0]
-    #     ytmp=list[r][0][0][1]
-    #     for lo in range(len(list[r])):
-    #         if xtmp > list[r][lo][0][0]:
-    #             xtmp =list[r][lo][0][0]
-    #     X = xtmp
-    #     Y = ytmp
-    #     H = list[r][len(list[r])-1][2][1]
-    #     W = list[r][len(list[r])-1][2][0]
-
-    #     index =(X-60,Y-10,W+55,H+10)
-    #     result.append(index)
-
     for loopbub in range(len(list)):
         Xtmp,Ytmp,Wtmp,Htmp = list[loopbub][0][0][0],list[loopbub][0][0][1],list[loopbub][0][2][0],list[loopbub][0][2][1]
         for posBub in range(1,len(list[loopbub])):
