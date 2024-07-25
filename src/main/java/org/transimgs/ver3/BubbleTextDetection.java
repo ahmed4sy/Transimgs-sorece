@@ -15,6 +15,7 @@ import java.awt.image.DataBufferByte;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -490,6 +491,30 @@ public class BubbleTextDetection {
 
         }
         return bube;
+    }
+
+    public static List<List<Integer>> filterRect(BufferedImage readimg, List<List<Integer>> list) throws TesseractException {
+        ITesseract instance = new Tesseract();
+        instance.setLanguage("eng");
+        instance.setDatapath("/usr/share/tesseract-ocr/4.00/tessdatafast/");
+        instance.setTessVariable("user_defined_dpi", "300");
+        List<List<Integer>> res = list;
+        for (List<Integer> ele : list) {
+            BufferedImage img = new BufferedImage(ele.get(2) - ele.get(0), ele.get(3) - ele.get(1),
+                    BufferedImage.TYPE_INT_RGB);
+            Graphics2D Wimg = (Graphics2D) img.getGraphics();
+            Wimg.drawImage(readimg, -ele.get(0), -ele.get(1), null);
+            String text = instance.doOCR(img);
+            text = clearSymbols(text);
+            if (text.length() < 2 || !hasEnglishLetters(text)) {
+                res.set(res.indexOf(ele), null);
+            }
+        }
+
+        while (res.contains(null)) {
+            res.remove(null);
+        }
+        return res;
     }
 
     public static String executeCommand(String command) {

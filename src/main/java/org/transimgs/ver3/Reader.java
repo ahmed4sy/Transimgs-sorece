@@ -325,6 +325,7 @@ public class Reader {
                         .replace("~", "")
                         .replace("/", "")
                         .replace("\\", "")
+                        .replace(" ?", "?")
                         .split("\n");
                 ArrayList<String> ArrtxtList = new ArrayList<String>();
                 ArrtxtList.addAll(Arrays.asList(Arrtext));

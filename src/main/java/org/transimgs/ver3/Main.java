@@ -46,6 +46,7 @@ public class Main {
         System.out.println("-------------" + imagename.split("/")[imagename.split("/").length - 1] + "-------------");
         Reader rdr = new Reader(imagename);
         List<List<Integer>> resultReader = rdr.dataOCR();
+        resultReader = BubbleTextDetection.filterRect(ImageIO.read(new File(imagename)), resultReader);
         ArrayList<ArrayList<String>> Text = rdr.getText(resultReader);
         Text = TransText.translistText(Text);
         Drawing dra = new Drawing(Reader.sorece, Text, resultReader);
