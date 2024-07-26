@@ -19,8 +19,8 @@ def bubbles(ocr:list):
     root = [ocr[0][0]]
     tmp = ocr[0][0][0]
     list = []
-    limitx = 90
-    limity = 90
+    limitx = 100
+    limity = 100
     n = 0
     Boolen = [True]
     on = False

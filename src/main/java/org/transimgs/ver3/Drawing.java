@@ -101,7 +101,7 @@ public class Drawing {
         int i = 0;
         for (List<Integer> reRe : resultReader) {
             int ms = (reRe.get(3) - reRe.get(1));
-            int fontsize = (int) ((ms / 10) + 15);
+            int fontsize = (int) (((double) ms / 10) + 12.5);
             if (!text.isEmpty()) {
                 W.setFont(new Font("Batang", 2, fontsize));
                 W.setColor(Color.white);
@@ -115,7 +115,7 @@ public class Drawing {
                         Rectangle2D rect = fma.getStringBounds(txs, W);
                         int centerX = (reRe.get(2) + reRe.get(0) - (int) rect.getWidth()) / 2;
                         W.drawString(txs, centerX, reRe.get(1) + 30 + space);
-                        space += (int) rect.getHeight() + 5;
+                        space += (int) rect.getHeight() + 6;
                     }
                 }
 
@@ -125,8 +125,6 @@ public class Drawing {
         }
         ImageIO.write(image, "jpg", new File(outfolder + Nameimg));
         Thread.sleep(500);
-        Runtime.getRuntime().exec(
-                "open " + outfolder);
         println("Done!");
     }
 

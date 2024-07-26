@@ -517,6 +517,24 @@ public class BubbleTextDetection {
         return res;
     }
 
+    public static ArrayList<String> wrapWords(String text) {
+        ArrayList<String> wrappedWords = new ArrayList<>();
+        String[] words = text.split(" ");
+
+        for (int i = 0; i < words.length; i += 2) {
+            StringBuilder wrappedPair = new StringBuilder();
+            wrappedPair.append(words[i]);
+
+            if (i + 1 < words.length) {
+                wrappedPair.append(" ").append(words[i + 1]);
+            }
+
+            wrappedWords.add(wrappedPair.toString());
+        }
+
+        return wrappedWords;
+    }
+
     public static String executeCommand(String command) {
         Process p;
         try {

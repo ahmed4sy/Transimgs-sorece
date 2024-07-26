@@ -95,6 +95,15 @@ public class TransText {
             start = end;
         }
 
+        // إضافة النص المتبقي إذا كان هناك أي
+        if (start < words.length) {
+            StringBuilder remainingSegment = new StringBuilder();
+            for (int i = start; i < words.length; i++) {
+                remainingSegment.append(words[i]).append(" ");
+            }
+            result.add(remainingSegment.toString().strip());
+        }
+
         return result;
     }
 

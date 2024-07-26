@@ -251,8 +251,8 @@ public class Reader {
             if (Debug == true) {
                 System.out.println("gps: " + place);
             }
-            Wimg.setColor(Color.red);
-            Wimg.fillRect(place.get(0), place.get(1), place.get(2) - place.get(0),
+            Wimg.setColor(Color.green);
+            Wimg.drawRect(place.get(0), place.get(1), place.get(2) - place.get(0),
                     place.get(3) - place.get(1));
         }
         ImageIO.write(img, "jpg", new File("displayPlacesRead.jpg"));
