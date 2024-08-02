@@ -27,7 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Reader {
-
+    static boolean PrintState = false;
     static String sorece;
 
     static void print(String txt) {
@@ -42,6 +42,10 @@ public class Reader {
         this.sorece = sorece;
     }
 
+    static void modePrintState() {
+        PrintState = true;
+    }
+
     static boolean Debug = false;
 
     void modeDebug() {
@@ -49,7 +53,12 @@ public class Reader {
     }
 
     List<List<Integer>> dataOCR() throws JSONException, InterruptedException, IOException {
-        print("dataOCR..");
+        if (!PrintState) print("dataOCR..");
+        JSONObject retjs = new JSONObject();
+        retjs.put("dataOCR", new ArrayList());
+        retjs.put("sorece", "");
+        retjs.put("State", false);
+        BubbleTextDetection.writeJsonToFile("Jython/marge.json", retjs);
         JSONObject js = BubbleTextDetection.readJsonFile("Jython/marge.json");
         if (js == null) {
             return null;
@@ -68,13 +77,13 @@ public class Reader {
             Thread.sleep(1000);
             sec--;
             if (sec >= 0) {
-                System.out.print("\rdataOCR.running.." + sec);
+                if (!PrintState) System.out.print("\rdataOCR.running.." + sec + "sec");
             } else {
-                System.out.print("\rdataOCR.running..");
+                if (!PrintState) System.out.print("\rdataOCR.running..( almost.. )");
             }
 
         }
-        System.out.print("\rdataOCR..running..");
+        if (!PrintState) System.out.print("\rdataOCR..running..");
         List<List<Integer>> dataOCR = new ArrayList<>();
         for (int i = 0; i < js.getJSONArray("dataOCR").length(); i++) {
             dataOCR.add(
@@ -85,18 +94,14 @@ public class Reader {
         if (Debug) {
             System.out.println("dataOCR: " + dataOCR);
         }
-        JSONObject retjs = new JSONObject();
-        retjs.put("dataOCR", new ArrayList());
-        retjs.put("sorece", "");
-        retjs.put("State", false);
-        BubbleTextDetection.writeJsonToFile("Jython/marge.json", retjs);
-        println("Done!");
+
+        if (!PrintState) println("Done!");
         return dataOCR;
     }
 
     ArrayList<ArrayList<Integer>> bubsOcr(boolean pythonRun) throws IOException, InterruptedException {
         String res;
-        print("bubOcr..");
+        if (!PrintState) print("bubOcr..");
         if (pythonRun) {
             print("python..");
             Runtime.getRuntime()
@@ -290,13 +295,13 @@ public class Reader {
     }
 
     ArrayList<ArrayList<String>> getText(List<List<Integer>> lis)
-            throws IOException, InterruptedException, TesseractException {
-        print("GetTexT Loading..");
+            throws IOException, InterruptedException, TesseractException, Exception {
+        if (!PrintState) print("GetTexT Loading..");
         ArrayList<ArrayList<String>> label = new ArrayList<ArrayList<String>>();
         BufferedImage readimg = ImageIO.read(new File(sorece));
         ITesseract instance = new Tesseract();
         instance.setLanguage("eng");
-        instance.setDatapath("/usr/share/tesseract-ocr/4.00/tessdata/");
+        instance.setDatapath("Training/tessdata/");
         instance.setTessVariable("user_defined_dpi", "300");
         if (Debug) {
             int i = 1;
@@ -312,27 +317,39 @@ public class Reader {
                 i++;
             }
         } else {
+            int ine = 1;
             for (List<Integer> ele : lis) {
-                BufferedImage img = new BufferedImage(ele.get(2) - ele.get(0), ele.get(3) - ele.get(1),
+                BufferedImage img = new BufferedImage(ele.get(2) - ele.get(0) + 5, ele.get(3) - ele.get(1) + 5,
                         BufferedImage.TYPE_INT_RGB);
                 Graphics2D Wimg = (Graphics2D) img.getGraphics();
-                Wimg.drawImage(readimg, -ele.get(0), -ele.get(1), null);
-                String text = instance.doOCR(img);
-                String Arrtext[] = text.toLowerCase()
-                        .replace(" -", "-")
-                        .replace("- ", "-")
-                        .replace("_", "")
-                        .replace("~", "")
-                        .replace("/", "")
-                        .replace("\\", "")
-                        .replace(" ?", "?")
-                        .split("\n");
-                ArrayList<String> ArrtxtList = new ArrayList<String>();
-                ArrtxtList.addAll(Arrays.asList(Arrtext));
-                label.add(ArrtxtList);
+                Wimg.drawImage(readimg, -ele.get(0) + 5, -ele.get(1) + 5, null);
+//                ImageIO.write(img, "jpg", new File("imgs/" + ine + ".jpg"));
+//                ine++;
+                try {
+                    String text = DoorsOcr(img).toLowerCase();
+                    String Arrtext[] = SpellCheckExample.CorrectText(text)
+                            .replace(" -", "-")
+                            .replace("- ", "-")
+                            .replace("_", "")
+                            .replace("~", "")
+                            .replace("/", "")
+                            .replace("\\", "")
+                            .split("\n");
+                    ArrayList<String> ArrtxtList = new ArrayList<String>();
+                    ArrtxtList.addAll(Arrays.asList(Arrtext));
+                    label.add(ArrtxtList);
+
+                } catch (Exception e) {
+                }
             }
         }
-        println("Done!");
+        if (!PrintState) println("Done!");
         return label;
+    }
+
+    public static String DoorsOcr(BufferedImage img) throws TesseractException {
+        String text = "not";
+        OCRSpaceExample.test(img);
+        return text;
     }
 }

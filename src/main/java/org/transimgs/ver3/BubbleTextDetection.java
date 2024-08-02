@@ -506,7 +506,8 @@ public class BubbleTextDetection {
             Wimg.drawImage(readimg, -ele.get(0), -ele.get(1), null);
             String text = instance.doOCR(img);
             text = clearSymbols(text);
-            if (text.length() < 2 || !hasEnglishLetters(text)) {
+//            System.out.println("text:" + text.length() + ": \n" + text + "\n\n");
+            if (text.length() < 2 || !hasEnglishLetters(text) || countEnglishLetters(text) < 2) {
                 res.set(res.indexOf(ele), null);
             }
         }
@@ -575,8 +576,22 @@ public class BubbleTextDetection {
                 .replace("{", "")
                 .replace("‘", "")
                 .replace("'", "")
+                .replace("&", "")
+                .replace("“", "")
+                .replace("§", "")
                 .replace("\"", "");
         return res;
+    }
+
+    public static int countEnglishLetters(String text) {
+        int count = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public static List<BufferedImage> filtercompare(List<BufferedImage> bubs) {

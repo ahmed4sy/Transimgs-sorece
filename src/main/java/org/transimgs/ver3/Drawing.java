@@ -100,8 +100,9 @@ public class Drawing {
         Graphics2D W = image.createGraphics();
         int i = 0;
         for (List<Integer> reRe : resultReader) {
-            int ms = (reRe.get(3) - reRe.get(1));
-            int fontsize = (int) (((double) ms / 10) + 12.5);
+            int h = (reRe.get(3) - reRe.get(1));
+            int w = (reRe.get(2) - reRe.get(0));
+            int fontsize = (int) (h / text.get(i).size()) - 10;
             if (!text.isEmpty()) {
                 W.setFont(new Font("Batang", 2, fontsize));
                 W.setColor(Color.white);

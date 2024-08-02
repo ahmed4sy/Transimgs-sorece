@@ -74,6 +74,30 @@ public class TransText {
         return res;
     }
 
+    public static ArrayList<ArrayList<String>> translistTextGPT(ArrayList<ArrayList<String>> text) throws Exception {
+        System.out.print("TranslatorGPT...");
+        ArrayList<ArrayList<String>> res = text;
+        List<Integer> positions = new ArrayList<>();
+        for (ArrayList<String> txt : text) {
+            String tmp = txt.get(0);
+            positions.add(txt.get(0).split(" ").length);
+            for (int i = 1; i < txt.size(); i++) {
+                tmp += " " + txt.get(i);
+                positions.add(txt.get(i).split(" ").length);
+            }
+            String trn = HuggingFaceTranslation.translateGPT(BubbleTextDetection.clearSymbols(tmp.strip())).strip();
+            List<String> ty = splitTextByPos(trn, positions);
+            positions.clear();
+            ArrayList<String> ty1 = new ArrayList<>();
+            for (String word : ty) {
+                ty1.add(word);
+            }
+            res.set(res.indexOf(txt), ty1);
+        }
+        System.out.println("Done!");
+        return res;
+    }
+
     public static List<String> splitTextByPos(String text, List<Integer> positions) {
         List<String> result = new ArrayList<>();
         String[] words = text.split(" ");

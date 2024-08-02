@@ -1,15 +1,19 @@
 package org.transimgs.ver3;
 
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class text {
-    public static void main(String[] args) {
-        String text = "hi iam ahmed and my name is ahmed";
-        List<Integer> positions = List.of(2, 1, 2);
+    public static void main(String[] args) throws IOException {
 
-        List<String> result = splitTextByPositions(text, positions);
-        System.out.println(result); // Output: [ahmed, hi iam]
+        System.out.println(
+                OCRSpaceExample.doOCR(
+                        ImageIO.read(new File("imgs/1.jpg"))
+                )
+        );
     }
 
     public static List<String> splitTextByPositions(String text, List<Integer> positions) {
